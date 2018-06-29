@@ -2,14 +2,20 @@
     display: inline-block;
 }
 #snake-renew,#snake-start{
-    width: 150px;
+    width: 140px;
     padding: 15px;
     color: white;
     background-color: green;
     text-align: center;
     cursor: pointer;
-    float: left;
-    margin-right: 10px;
+}
+#snake-score{
+    width: 330px;
+    padding: 15px;
+    color: white;
+    background-color: green;
+    text-align: center;
+    margin: 15px auto;
 }
 .game-table{
     border-collapse: collapse;
@@ -27,7 +33,10 @@ td.game-table-cell{
     background-color: red;
 }
 .buttons{
-    display: inline-block;
+    margin: 0 auto;
+    width: 380px;
+    display: flex;
+    justify-content: space-around;
 }
 .wrap{
     margin: 30px auto 0;
