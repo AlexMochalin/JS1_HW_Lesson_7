@@ -69,7 +69,8 @@ function startGame() {
     respawn();//создали змейку
 
     snake_timer = setInterval(move, SNAKE_SPEED);//каждые 200мс запускаем функцию move
-    setTimeout(createFood, 5000);
+    setTimeout(createFood, 500);
+	setTimeout(createObstacle, 500);
 }
 
 /**
@@ -173,7 +174,6 @@ function haveFood(unit) {
     if (unit_classes.includes('food-unit')) {
         check = true;
         createFood();
-
         score++;
 		scoreDiv();//функция вывода на экран текущего количества очков
     }
@@ -258,6 +258,31 @@ function scoreDiv() { //функция вывода на экран текуще
 	var a = document.createElement('div');
 	a.innerText='Текущее количество очков: '+score;
 	document.getElementById('snake-score').appendChild(a);
+}
+
+function createObstacle() {
+    var obstacleCreated = false;
+
+    while (!obstacleCreated) { //пока препятствие не создали
+        // рандом
+        var obstacle_x = Math.floor(Math.random() * FIELD_SIZE_X);
+        var obstacle_y = Math.floor(Math.random() * FIELD_SIZE_Y);
+
+        var obstacle_cell = document.getElementsByClassName('cell-' + obstacle_y + '-' + obstacle_x)[0];
+		obstacle_cell.setAttribute('class', 'obstacle-unit');
+        //var obstacle_cell_classes = obstacle_cell.getAttribute('class').split(' ');
+
+        // проверка на змейку
+        //if (!obstacle_cell_classes.includes('snake-unit')) {
+            //var classesОbstacle = '';
+            //for (var b = 0; b < obstacle_cell_classes.length; b++) {
+                //classesОbstacle += obstacle_cell_classes[b] + ' ';
+            //}
+
+            //obstacle_cell.setAttribute('class', classesОbstacle + 'obstacle-unit');
+            //obstacleCreated = true;
+        }
+    }
 }
 
 // Инициализация
