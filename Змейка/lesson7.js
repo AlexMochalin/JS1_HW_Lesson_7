@@ -69,8 +69,8 @@ function startGame() {
     respawn();//создали змейку
 
     snake_timer = setInterval(move, SNAKE_SPEED);//каждые 200мс запускаем функцию move
-    setTimeout(createFood, 500);
-	setTimeout(createObstacle, 500);
+    setTimeout(createFood, 1000);
+	setTimeout(createObstacle, 1000);
 }
 
 /**
@@ -145,6 +145,10 @@ function move() {
     else {
         finishTheGame();
     }
+	classes = new_unit.getAttribute('class').split(' ');//Прекращение игры при  встрече с препятствием
+	if (classes.includes('obstacle-unit')) {
+        finishTheGame();
+    }
 }
 
 /**
@@ -174,6 +178,7 @@ function haveFood(unit) {
     if (unit_classes.includes('food-unit')) {
         check = true;
         createFood();
+		createObstacle();
         score++;
 		scoreDiv();//функция вывода на экран текущего количества очков
     }
@@ -260,27 +265,27 @@ function scoreDiv() { //функция вывода на экран текуще
 	document.getElementById('snake-score').appendChild(a);
 }
 
-function createObstacle() {
+function createObstacle() { // функция препятствия
     var obstacleCreated = false;
 
     while (!obstacleCreated) { //пока препятствие не создали
-        // рандом
+        
+		// рандом
         var obstacle_x = Math.floor(Math.random() * FIELD_SIZE_X);
         var obstacle_y = Math.floor(Math.random() * FIELD_SIZE_Y);
 
         var obstacle_cell = document.getElementsByClassName('cell-' + obstacle_y + '-' + obstacle_x)[0];
-		obstacle_cell.setAttribute('class', 'obstacle-unit');
-        //var obstacle_cell_classes = obstacle_cell.getAttribute('class').split(' ');
+        var obstacle_cell_classes = obstacle_cell.getAttribute('class').split(' ');
 
-        // проверка на змейку
-        //if (!obstacle_cell_classes.includes('snake-unit')) {
-            //var classesОbstacle = '';
-            //for (var b = 0; b < obstacle_cell_classes.length; b++) {
-                //classesОbstacle += obstacle_cell_classes[b] + ' ';
-            //}
+        // проверка на змейку и еду
+        if (!obstacle_cell_classes.includes('snake-unit') || !obstacle_cell_classes.includes('food-unit')) {
+            var classesОbstacle = '';
+            for (var b = 0; b < obstacle_cell_classes.length; b++) {
+                classesОbstacle += obstacle_cell_classes[b] + ' ';
+            }
 
-            //obstacle_cell.setAttribute('class', classesОbstacle + 'obstacle-unit');
-            //obstacleCreated = true;
+            obstacle_cell.setAttribute('class', classesОbstacle + 'obstacle-unit');
+            obstacleCreated = true;
         }
     }
 }
