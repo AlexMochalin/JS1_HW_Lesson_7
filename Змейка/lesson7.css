@@ -32,6 +32,9 @@ td.game-table-cell{
 .food-unit{
     background-color: red;
 }
+.obstacle-unit{
+    background-color: yellow;
+}
 .buttons{
     margin: 0 auto;
     width: 380px;
