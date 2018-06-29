@@ -27,6 +27,8 @@ function init() {
     // События кнопок Старт и Новая игра
     document.getElementById('snake-start').addEventListener('click', startGame);
     document.getElementById('snake-renew').addEventListener('click', refreshGame);
+	scoreDiv();//функция вывода на экран текущего количества очков
+	
 
 // Отслеживание клавиш клавиатуры
     addEventListener('keydown', changeDirection);
@@ -173,6 +175,7 @@ function haveFood(unit) {
         createFood();
 
         score++;
+		scoreDiv();//функция вывода на экран текущего количества очков
     }
     return check;
 }
@@ -248,6 +251,13 @@ function finishTheGame() {
  */
 function refreshGame() {
     location.reload();
+}
+
+function scoreDiv() { //функция вывода на экран текущего количества очков
+	document.getElementById('snake-score').innerHTML='';
+	var a = document.createElement('div');
+	a.innerText='Текущее количество очков: '+score;
+	document.getElementById('snake-score').appendChild(a);
 }
 
 // Инициализация
