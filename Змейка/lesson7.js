@@ -2,6 +2,8 @@
 var FIELD_SIZE_X = 20;//строки
 var FIELD_SIZE_Y = 20;//столбцы
 var SNAKE_SPEED = 200; // Интервал между перемещениями змейки
+var FOOD_SPEED = 1000; // Интервал между перемещениями змейки
+var OBSTACLE_SPEED = 7000; // Интервал между перемещениями змейки
 var snake = []; // Сама змейка
 var direction = 'y+'; // Направление движения змейки
 var gameIsRunning = false; // Запущена ли игра
@@ -69,8 +71,8 @@ function startGame() {
     respawn();//создали змейку
 
     snake_timer = setInterval(move, SNAKE_SPEED);//каждые 200мс запускаем функцию move
-    setTimeout(createFood, 1000);
-	setTimeout(createObstacle, 1000);
+    setTimeout(createFood, FOOD_SPEED);
+	setInterval(createObstacle, OBSTACLE_SPEED);
 }
 
 /**
@@ -142,13 +144,22 @@ function move() {
             removed.setAttribute('class', classes[0] + ' ' + classes[1]);
         }
     }
+	else if (new_unit == undefined) {// Выход за границы
+		
+		
+	}
     else {
         finishTheGame();
     }
+	
 	classes = new_unit.getAttribute('class').split(' ');//Прекращение игры при  встрече с препятствием
 	if (classes.includes('obstacle-unit')) {
         finishTheGame();
     }
+	if (classes.includes('cell-0-'+coord_x)) {
+		new_unit.getAttribute('class','cell-0-'+coord_x).setAttribute(' ');
+		new_unit.setAttribute('class','cell-19-'+coord_x);
+	}
 }
 
 /**
@@ -178,7 +189,6 @@ function haveFood(unit) {
     if (unit_classes.includes('food-unit')) {
         check = true;
         createFood();
-		createObstacle();
         score++;
 		scoreDiv();//функция вывода на экран текущего количества очков
     }
