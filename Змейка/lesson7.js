@@ -2,7 +2,7 @@
 var FIELD_SIZE_X = 20;//строки
 var FIELD_SIZE_Y = 20;//столбцы
 var SNAKE_SPEED = 200; // Интервал между перемещениями змейки
-var FOOD_SPEED = 1000; // Интервал между перемещениями змейки
+var FOOD_SPEED = 5000; // Интервал между перемещениями змейки
 var OBSTACLE_SPEED = 7000; // Интервал между перемещениями змейки
 var snake = []; // Сама змейка
 var direction = 'y+'; // Направление движения змейки
@@ -71,7 +71,8 @@ function startGame() {
     respawn();//создали змейку
 
     snake_timer = setInterval(move, SNAKE_SPEED);//каждые 200мс запускаем функцию move
-    setTimeout(createFood, FOOD_SPEED);
+    setTimeout(createFood, 1000);
+	setInterval(createFood, FOOD_SPEED);
 	setInterval(createObstacle, OBSTACLE_SPEED);
 }
 
@@ -130,21 +131,8 @@ function move() {
     // 2) Змейка не ушла за границу поля
     //console.log(new_unit);
     if (!isSnakeUnit(new_unit)) {
-		if (new_unit == undefined) {
-			switch(direction){
-				case 'x-':
-					new_unit = document.getElementsByClassName('cell-' + coord_y + '-' + (FIELD_SIZE_X - 1))[0];
-					break;
-				case 'x+':
-					new_unit = document.getElementsByClassName('cell-' + coord_y + '-' + '0')[0];
-					break;
-				case 'y-':
-					new_unit = document.getElementsByClassName('cell-' + '0' + '-' + coord_x)[0];
-					break;
-				case 'y+':
-					new_unit = document.getElementsByClassName('cell-' + (FIELD_SIZE_Y - 1) + '-' + coord_x)[0];
-					break;
-			}
+		if (new_unit == undefined){//включение функции телепортации при выходе головы за пределы поля
+			new_unit = snakeTeleport(coord_y, coord_x);
 		}
         // Добавление новой части змейки
         new_unit.setAttribute('class', new_unit.getAttribute('class') + ' snake-unit');
@@ -162,10 +150,12 @@ function move() {
     }
     else {
         finishTheGame();
+		refreshGame();
     }
 	classes = new_unit.getAttribute('class').split(' ');//Прекращение игры при  встрече с препятствием
 	if (classes.includes('obstacle-unit')) {
         finishTheGame();
+		refreshGame();
     }
 }
 
@@ -195,7 +185,6 @@ function haveFood(unit) {
     // Если еда
     if (unit_classes.includes('food-unit')) {
         check = true;
-        createFood();
         score++;
 		scoreDiv();//функция вывода на экран текущего количества очков
     }
@@ -306,6 +295,25 @@ function createObstacle() { // функция препятствия
         }
     }
 }
+
+function snakeTeleport(coord_y, coord_x){//функция телепортации
+	switch(direction){
+		case 'x-':
+			item = document.getElementsByClassName('cell-' + coord_y + '-' + (FIELD_SIZE_X - 1))[0];
+			break;
+		case 'x+':
+			item = document.getElementsByClassName('cell-' + coord_y + '-' + '0')[0];
+			break;
+		case 'y-':
+			item = document.getElementsByClassName('cell-' + '0' + '-' + coord_x)[0];
+			break;
+		case 'y+':
+			item = document.getElementsByClassName('cell-' + (FIELD_SIZE_Y - 1) + '-' + coord_x)[0];
+			break;
+	}
+	return item;
+}
+
 
 // Инициализация
 window.onload = init;
