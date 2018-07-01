@@ -129,7 +129,23 @@ function move() {
     // 1) new_unit не часть змейки
     // 2) Змейка не ушла за границу поля
     //console.log(new_unit);
-    if (!isSnakeUnit(new_unit) && new_unit !== undefined) {
+    if (!isSnakeUnit(new_unit)) {
+		if (new_unit == undefined) {
+			switch(direction){
+				case 'x-':
+					new_unit = document.getElementsByClassName('cell-' + coord_y + '-' + (FIELD_SIZE_X - 1))[0];
+					break;
+				case 'x+':
+					new_unit = document.getElementsByClassName('cell-' + coord_y + '-' + '0')[0];
+					break;
+				case 'y-':
+					new_unit = document.getElementsByClassName('cell-' + '0' + '-' + coord_x)[0];
+					break;
+				case 'y+':
+					new_unit = document.getElementsByClassName('cell-' + (FIELD_SIZE_Y - 1) + '-' + coord_x)[0];
+					break;
+			}
+		}
         // Добавление новой части змейки
         new_unit.setAttribute('class', new_unit.getAttribute('class') + ' snake-unit');
         snake.push(new_unit);
@@ -144,22 +160,13 @@ function move() {
             removed.setAttribute('class', classes[0] + ' ' + classes[1]);
         }
     }
-	else if (new_unit == undefined) {// Выход за границы
-		
-		
-	}
     else {
         finishTheGame();
     }
-	
 	classes = new_unit.getAttribute('class').split(' ');//Прекращение игры при  встрече с препятствием
 	if (classes.includes('obstacle-unit')) {
         finishTheGame();
     }
-	if (classes.includes('cell-0-'+coord_x)) {
-		new_unit.getAttribute('class','cell-0-'+coord_x).setAttribute(' ');
-		new_unit.setAttribute('class','cell-19-'+coord_x);
-	}
 }
 
 /**
